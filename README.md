@@ -1,2 +1,0 @@
-# Synonym-UI
-Vue.js
