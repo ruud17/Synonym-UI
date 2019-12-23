@@ -8,6 +8,15 @@
       </div>
 
       <div>
+        <div v-if="synonymsResults">
+          <ul id="synonyms-list">
+            <li v-for="item in synonymsResults" :key="item">{{ item }}</li>
+          </ul>
+        </div>
+        <div v-else>{{synonymsSearchResponseMessage}}</div>
+      </div>
+
+      <div>
         <hr />
         <span v-on:click="goToAddNewSynonymsTab(true)">Add new synonyms</span>
       </div>
@@ -30,6 +39,8 @@
 </template>
 
 <script>
+import synonymsAPI from "../api/synonymsAPI";
+
 export default {
   name: "HomePage",
   data() {
@@ -38,6 +49,7 @@ export default {
       //search tab state
       searchSynonymInputValue: "",
       synonymsResults: [],
+      synonymsSearchResponseMessage: "",
       //add new synonyms tab state
       newSynonymValue: "",
       newSynonymOriginWord: "",
@@ -46,12 +58,21 @@ export default {
   },
   methods: {
     searchSynonyms: function() {
-      console.log("search");
-      // call axios here
+      synonymsAPI
+        .searchSynonyms(this.searchSynonymInputValue)
+        .then(response => {
+          this.synonymsResults = response.data.response;
+          this.synonymsSearchResponseMessage = response.data.message;
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
     },
+
     goToAddNewSynonymsTab: function(value) {
       this.isSearchTabActive = !value;
     },
+
     addSynonym: function(event) {
       this.newSynonymsDataToSave.push(event.target.value);
     }

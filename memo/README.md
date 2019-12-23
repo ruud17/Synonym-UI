@@ -1,4 +1,4 @@
-# memo
+# Synonym UI
 
 ## Project setup
 ```
