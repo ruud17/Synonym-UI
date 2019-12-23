@@ -9,7 +9,7 @@
 
       <div>
         <div v-if="synonymsResults">
-          <ul id="synonyms-list">
+          <ul>
             <li v-for="item in synonymsResults" :key="item">{{ item }}</li>
           </ul>
         </div>
@@ -23,7 +23,6 @@
     </div>
 
     <div v-else>
-      <p>Add new synonyms:</p>
       <div>
         <p>Add new origin word</p>
         <input v-model="newSynonymOriginWord" placeholder="Enter origin word" />
@@ -33,6 +32,19 @@
         <p>Add synonyms</p>
         <input v-model="newSynonymValue" placeholder="Enter some word" />
         <button v-on:click="addSynonym">Add</button>
+        <div v-if="newSynonymsDataToSave.length>0">
+          <span>Added synonyms</span>
+          <ul>
+            <li v-for="item in newSynonymsDataToSave" :key="item">{{ item }}</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <button v-on:click="saveSynonyms">Save</button>
+      </div>
+      <div>
+        <hr />
+        <span v-on:click="goToAddNewSynonymsTab(false)">BACK</span>
       </div>
     </div>
   </div>
@@ -51,9 +63,10 @@ export default {
       synonymsResults: [],
       synonymsSearchResponseMessage: "",
       //add new synonyms tab state
-      newSynonymValue: "",
       newSynonymOriginWord: "",
-      newSynonymsDataToSave: []
+      newSynonymValue: "",
+      newSynonymsDataToSave: [],
+      addNewSynonymsResponseMessage: ""
     };
   },
   methods: {
@@ -65,7 +78,7 @@ export default {
           this.synonymsSearchResponseMessage = response.data.message;
         })
         .catch(e => {
-          this.errors.push(e);
+          console.log("error", e);
         });
     },
 
@@ -73,8 +86,25 @@ export default {
       this.isSearchTabActive = !value;
     },
 
-    addSynonym: function(event) {
-      this.newSynonymsDataToSave.push(event.target.value);
+    addSynonym: function() {
+      this.newSynonymsDataToSave.push(this.newSynonymValue);
+      this.newSynonymValue = "";
+    },
+
+    saveSynonyms: function() {
+      this.newSynonymsDataToSave.push(this.newSynonymOriginWord);
+      synonymsAPI
+        .addSynonyms({ data: this.newSynonymsDataToSave })
+        .then(response => {
+          console.log("response", response.data);
+          this.addNewSynonymsResponseMessage = response.data.message;
+          this.newSynonymOriginWord = "";
+          this.newSynonymValue = "";
+          this.newSynonymsDataToSave = [];
+        })
+        .catch(e => {
+          console.log("error", e);
+        });
     }
   }
 };
