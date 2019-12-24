@@ -24,9 +24,6 @@
                 <span class="button alt" v-for="item in synonymsResults" :key="item">{{ item }}</span>
               </div>
             </div>
-            <div v-else class="no-synonyms-found">
-              <h5>{{synonymsSearchResponseMessage}}</h5>
-            </div>
           </div>
           <div v-on:click="goToAddNewSynonymsTab(true)" class="link">
             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -89,7 +86,6 @@ export default {
       //search tab state
       searchSynonymInputValue: "",
       synonymsResults: [],
-      synonymsSearchResponseMessage: "",
       //add new synonyms tab state
       newSynonymOriginWord: "",
       newSynonymValue: "",
@@ -113,9 +109,12 @@ export default {
         .searchSynonyms(this.searchSynonymInputValue)
         .then(response => {
           this.synonymsResults = response.data.response;
-          this.synonymsSearchResponseMessage = response.data.message;
+          if (!this.synonymsResults) {
+            this.$toastr("info", `${response.data.message}`);
+          }
         })
         .catch(e => {
+          this.$toastr("error", e);
           console.log("error", e);
         });
     },
@@ -148,7 +147,6 @@ export default {
     resetDataWhenChangingTab: function() {
       (this.searchSynonymInputValue = ""),
         (this.synonymsResults = []),
-        (this.synonymsSearchResponseMessage = ""),
         (this.newSynonymOriginWord = ""),
         (this.newSynonymValue = ""),
         (this.newSynonymsDataToSave = []),
