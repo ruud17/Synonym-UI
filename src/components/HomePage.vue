@@ -127,10 +127,9 @@ export default {
     synonymsAPI
       .clearData()
       .then(response => {
-        console.log(response.data);
       })
       .catch(e => {
-        console.log("error", e);
+          this.$toastr("error", e);
       });
   },
   methods: {
@@ -150,7 +149,6 @@ export default {
         })
         .catch(e => {
           this.$toastr("error", e);
-          console.log("error", e);
         });
     },
 
