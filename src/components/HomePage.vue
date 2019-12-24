@@ -44,8 +44,8 @@
         </div>
 
         <div class="inner" v-else>
-          <div class="">
-            <h1>Add new synonyms</h1>
+          <h1>Add new synonyms</h1>
+          <div class="group-input-btn">
             <div class="field field-label synonyms-form">
               <input
                 class="custom-input"
@@ -73,30 +73,31 @@
                 Add Synonym
               </button>
             </div>
-            <div class="synonyms-list" v-if="newSynonymsDataToSave.length > 0">
-              <span
-                class="button alt item-list item"
-                v-for="item in newSynonymsDataToSave"
-                :key="item"
-              >
-                {{ item }}
-                <i class="fa fa-remove" v-on:click="deleteSynonym(item)"></i>
-              </span>
-            </div>
-            <div
-              v-if="
-                newSynonymOriginWord != '' && newSynonymsDataToSave.length > 0
-              "
+          </div>
+          <div class="synonyms-list" v-if="newSynonymsDataToSave.length > 0">
+            <span
+              class="button alt item-list item"
+              v-for="item in newSynonymsDataToSave"
+              :key="item"
             >
-              <button class="button save-btn" v-on:click="saveSynonyms">
-                Save Changes
-              </button>
-            </div>
-            <div class="synonyms-form-btn">
-              <div v-on:click="goToAddNewSynonymsTab(false)" class="link">
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                Back
-              </div>
+              {{ item }}
+              <i class="fa fa-remove" v-on:click="deleteSynonym(item)"></i>
+            </span>
+          </div>
+
+          <div
+            v-if="
+              newSynonymOriginWord != '' && newSynonymsDataToSave.length > 0
+            "
+          >
+            <button class="button save-btn" v-on:click="saveSynonyms">
+              Save Changes
+            </button>
+          </div>
+          <div class="synonyms-form-btn">
+            <div v-on:click="goToAddNewSynonymsTab(false)" class="link">
+              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              Back
             </div>
           </div>
         </div>
