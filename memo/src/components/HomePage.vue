@@ -1,52 +1,83 @@
 <template>
-  <div class="home">
-    <div v-if="isSearchTabActive">
-      <div>
-        <p>Search for synonyms:</p>
-        <input v-model="searchSynonymInputValue" placeholder="Enter some word" />
-        <button v-on:click="searchSynonyms">Search</button>
-      </div>
-
-      <div>
-        <div v-if="synonymsResults">
-          <ul>
-            <li v-for="item in synonymsResults" :key="item">{{ item }}</li>
-          </ul>
+  <div class="page-wrap">
+    <section id="main">
+      <section id="banner">
+        <div class="inner" v-if="isSearchTabActive">
+          <h1>Are you looking for synonyms?</h1>
+          <p>Enter the desired word...</p>
+          <div class="column">
+            <form>
+              <div class="field half first">
+                <input
+                  name="name"
+                  id="name"
+                  type="text"
+                  placeholder="Origin word..."
+                  v-model="searchSynonymInputValue"
+                />
+              </div>
+              <span class="button alt scrolly big" v-on:click="searchSynonyms">Search</span>
+            </form>
+          </div>
+          <div>
+            <div v-if="synonymsResults" id="results">
+              <div>
+                <span class="button alt" v-for="item in synonymsResults" :key="item">{{ item }}</span>
+              </div>
+            </div>
+            <div v-else>
+              <h5>{{synonymsSearchResponseMessage}}</h5>
+            </div>
+          </div>
+          <span v-on:click="goToAddNewSynonymsTab(true)" class="link">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Add new synonyms
+          </span>
         </div>
-        <div v-else>{{synonymsSearchResponseMessage}}</div>
-      </div>
 
-      <div>
-        <hr />
-        <span v-on:click="goToAddNewSynonymsTab(true)">Add new synonyms</span>
-      </div>
-    </div>
-
-    <div v-else>
-      <div>
-        <p>Add new origin word</p>
-        <input v-model="newSynonymOriginWord" placeholder="Enter origin word" />
-      </div>
-
-      <div>
-        <p>Add synonyms</p>
-        <input v-model="newSynonymValue" placeholder="Enter some word" />
-        <button v-on:click="addSynonym">Add</button>
-        <div v-if="newSynonymsDataToSave.length>0">
-          <span>Added synonyms</span>
-          <ul>
-            <li v-for="item in newSynonymsDataToSave" :key="item">{{ item }}</li>
-          </ul>
+        <div class="inner" v-else>
+          <div class="column">
+            <form>
+              <h2>Add new synonyms</h2>
+              <div class="field field-label">
+                <input
+                  name="originWord"
+                  id="originWord"
+                  type="text"
+                  placeholder="Enter origin word"
+                  v-model="newSynonymOriginWord"
+                />
+              </div>
+              <div class="field-label half first">
+                <input
+                  name="synonym"
+                  id="name"
+                  type="text"
+                  placeholder="Enter synonym..."
+                  v-model="newSynonymValue"
+                />
+                <span class="button alt scrolly big" v-on:click="addSynonym">Add Synonym</span>
+              </div>
+              <div class="synonyms-list" v-if="newSynonymsDataToSave.length>0">
+                Added synonyms:
+                <span
+                  class="button alt"
+                  v-for="item in newSynonymsDataToSave"
+                  :key="item"
+                >{{ item }}</span>
+              </div>
+              <div>
+                <button class="button save-btn" v-on:click="saveSynonyms">Save Synonyms</button>
+              </div>
+            </form>
+          </div>
+          <span v-on:click="goToAddNewSynonymsTab(false)" class="link">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            Back
+          </span>
         </div>
-      </div>
-      <div>
-        <button v-on:click="saveSynonyms">Save</button>
-      </div>
-      <div>
-        <hr />
-        <span v-on:click="goToAddNewSynonymsTab(false)">BACK</span>
-      </div>
-    </div>
+      </section>
+    </section>
   </div>
 </template>
 
@@ -110,6 +141,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style scoped>
+@import "../assets/css/main.css";
 </style>
