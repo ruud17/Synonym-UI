@@ -89,8 +89,7 @@ export default {
       //add new synonyms tab state
       newSynonymOriginWord: "",
       newSynonymValue: "",
-      newSynonymsDataToSave: [],
-      addNewSynonymsResponseMessage: ""
+      newSynonymsDataToSave: []
     };
   },
   mounted() {
@@ -134,13 +133,11 @@ export default {
       synonymsAPI
         .addSynonyms({ data: this.newSynonymsDataToSave })
         .then(response => {
-          this.addNewSynonymsResponseMessage = response.data.message;
-          this.newSynonymOriginWord = "";
-          this.newSynonymValue = "";
-          this.newSynonymsDataToSave = [];
+          this.$toastr("success", `${response.data.message}`);
+          this.resetDataWhenChangingTab();
         })
         .catch(e => {
-          console.log("error", e);
+          this.$toastr("error", `${e}`);
         });
     },
 
@@ -149,8 +146,7 @@ export default {
         (this.synonymsResults = []),
         (this.newSynonymOriginWord = ""),
         (this.newSynonymValue = ""),
-        (this.newSynonymsDataToSave = []),
-        (this.addNewSynonymsResponseMessage = "");
+        (this.newSynonymsDataToSave = []);
     }
   }
 };
