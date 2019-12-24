@@ -18,5 +18,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../node_modules/@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css';
+@import "../node_modules/@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css";
 </style>

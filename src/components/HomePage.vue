@@ -14,18 +14,26 @@
                 type="text"
                 placeholder="Origin word..."
                 v-model="searchSynonymInputValue"
+                v-on:keyup="searchOnEnter"
               />
             </div>
-            <button class="button search-btn" v-on:click="searchSynonyms">Search</button>
+            <button
+              class="button search-btn"
+              v-on:click="searchSynonyms"
+              :disabled="!searchSynonymInputValue.length"
+            >
+              Search
+            </button>
           </div>
           <div>
             <div v-if="synonymsResults" id="results">
               <div class="synonyms-list">
                 <span
-                  class="button alt item-list"
+                  class="button alt item-list item"
                   v-for="item in synonymsResults"
                   :key="item"
-                >{{ item }}</span>
+                  >{{ item }}</span
+                >
               </div>
             </div>
           </div>
@@ -36,15 +44,8 @@
         </div>
 
         <div class="inner" v-else>
-          <div class="column">
-            <h2 class="synonyms-form-btn">
-              <div v-on:click="goToAddNewSynonymsTab(false)" class="link">
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                Back
-              </div>Add new synonyms
-            </h2>
-            <div></div>
-
+          <div class="">
+            <h1>Add new synonyms</h1>
             <div class="field field-label synonyms-form">
               <input
                 class="custom-input"
@@ -68,16 +69,34 @@
                 class="button add-synonym-btn search-btn"
                 v-on:click="addSynonym"
                 :disabled="!newSynonymValue || !newSynonymOriginWord"
-              >Add Synonym</button>
+              >
+                Add Synonym
+              </button>
             </div>
-            <div class="synonyms-list" v-if="newSynonymsDataToSave.length>0">
-              <span class="button alt item-list item" v-for="item in newSynonymsDataToSave" :key="item">
+            <div class="synonyms-list" v-if="newSynonymsDataToSave.length > 0">
+              <span
+                class="button alt item-list item"
+                v-for="item in newSynonymsDataToSave"
+                :key="item"
+              >
                 {{ item }}
                 <i class="fa fa-remove" v-on:click="deleteSynonym(item)"></i>
               </span>
             </div>
-            <div v-if="newSynonymOriginWord!='' && newSynonymsDataToSave.length>0 ">
-              <button class="button save-btn" v-on:click="saveSynonyms">Save Changes</button>
+            <div
+              v-if="
+                newSynonymOriginWord != '' && newSynonymsDataToSave.length > 0
+              "
+            >
+              <button class="button save-btn" v-on:click="saveSynonyms">
+                Save Changes
+              </button>
+            </div>
+            <div class="synonyms-form-btn">
+              <div v-on:click="goToAddNewSynonymsTab(false)" class="link">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                Back
+              </div>
             </div>
           </div>
         </div>
@@ -114,6 +133,11 @@ export default {
       });
   },
   methods: {
+    searchOnEnter: function(e) {
+      if (e.keyCode === 13) {
+        this.searchSynonyms();
+      }
+    },
     searchSynonyms: function() {
       synonymsAPI
         .searchSynonyms(this.searchSynonymInputValue)
@@ -135,7 +159,7 @@ export default {
     },
 
     addSynonym: function() {
-      if (this.newSynonymsDataToSave.indexOf(this.newSynonymValue) > 0) {
+      if (this.newSynonymsDataToSave.indexOf(this.newSynonymValue) != -1) {
         this.$toastr("info", "Synonym already exists");
         return;
       }
@@ -179,10 +203,10 @@ export default {
 
 .link {
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
   letter-spacing: 0.05em;
   color: #4bb6fe;
-  margin-top: 10px;
+  margin-top: 60px;
   font-weight: bold;
 }
 
@@ -205,12 +229,12 @@ export default {
 .synonyms-list {
   margin-top: 20px;
   display: flex;
-  max-width: 90%;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .synonyms-list .item {
-  margin-right: 10px
+  margin-right: 7px;
 }
 
 .search-form {
@@ -253,7 +277,7 @@ export default {
 
 .synonyms-form-btn {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .item-list {
