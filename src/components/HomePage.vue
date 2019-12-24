@@ -5,9 +5,8 @@
         <div class="inner" v-if="isSearchTabActive">
           <h1>Are you looking for synonyms?</h1>
           <p>Enter the desired word...</p>
-          <div class="column">
-            <form>
-              <div class="field half first">
+          <div class="search-form">
+              <div class="field half first input">
                 <input
                   name="name"
                   id="name"
@@ -17,7 +16,6 @@
                 />
               </div>
               <span class="button alt scrolly big" v-on:click="searchSynonyms">Search</span>
-            </form>
           </div>
           <div>
             <div v-if="synonymsResults" id="results">
@@ -29,17 +27,16 @@
               <h5>{{synonymsSearchResponseMessage}}</h5>
             </div>
           </div>
-          <span v-on:click="goToAddNewSynonymsTab(true)" class="link">
+          <div v-on:click="goToAddNewSynonymsTab(true)" class="link">
             <i class="fa fa-plus" aria-hidden="true"></i>
-            Add new synonyms
-          </span>
+            Add New Synonyms
+          </div>
         </div>
 
         <div class="inner" v-else>
           <div class="column">
-            <form>
               <h2>Add new synonyms</h2>
-              <div class="field field-label">
+              <div class="field field-label synonyms-form">
                 <input
                   name="originWord"
                   id="originWord"
@@ -69,12 +66,11 @@
               <div>
                 <button class="button save-btn" v-on:click="saveSynonyms">Save Synonyms</button>
               </div>
-            </form>
           </div>
-          <span v-on:click="goToAddNewSynonymsTab(false)" class="link">
+          <div v-on:click="goToAddNewSynonymsTab(false)" class="link">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
             Back
-          </span>
+          </div>
         </div>
       </section>
     </section>
@@ -127,7 +123,6 @@ export default {
       synonymsAPI
         .addSynonyms({ data: this.newSynonymsDataToSave })
         .then(response => {
-          console.log("response", response.data);
           this.addNewSynonymsResponseMessage = response.data.message;
           this.newSynonymOriginWord = "";
           this.newSynonymValue = "";
@@ -143,4 +138,44 @@ export default {
 
 <style scoped>
 @import "../assets/css/main.css";
+
+.link {
+    cursor: pointer;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    color: #75a2f3;
+    margin-top: 40px;
+    font-weight: bold;
+}
+
+.save-btn {
+    margin-top: 30px;
+    font-size: 16px;
+}
+
+.field-label {
+    display: flex;
+    color: black;
+}
+
+.synonyms-list {
+    margin-top: 20px;
+}
+
+.search-form{
+  display: flex;
+  justify-content: center
+}
+
+.search-form .input{
+  width: 60%;
+}
+
+.search-form .button{
+  width: 20%;
+}
+
+.synonyms-form{
+  margin-bottom: 10px
+}
 </style>
