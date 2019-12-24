@@ -21,7 +21,11 @@
           <div>
             <div v-if="synonymsResults" id="results">
               <div class="synonyms-list">
-                <span class="button alt" v-for="item in synonymsResults" :key="item">{{ item }}</span>
+                <span
+                  class="button alt item-list"
+                  v-for="item in synonymsResults"
+                  :key="item"
+                >{{ item }}</span>
               </div>
             </div>
           </div>
@@ -33,9 +37,17 @@
 
         <div class="inner" v-else>
           <div class="column">
-            <h2>Add new synonyms</h2>
+            <h2 class="synonyms-form-btn">
+              <div v-on:click="goToAddNewSynonymsTab(false)" class="link">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                Back
+              </div>Add new synonyms
+            </h2>
+            <div></div>
+
             <div class="field field-label synonyms-form">
               <input
+                class="custom-input"
                 name="originWord"
                 id="originWord"
                 type="text"
@@ -45,29 +57,28 @@
             </div>
             <div class="field-label half first">
               <input
+                class="custom-input search-field"
                 name="synonym"
                 id="name"
                 type="text"
                 placeholder="Enter synonym..."
                 v-model="newSynonymValue"
               />
-              <span class="button alt scrolly big" v-on:click="addSynonym">Add Synonym</span>
+              <button
+                class="button add-synonym-btn search-btn"
+                v-on:click="addSynonym"
+                :disabled="!newSynonymValue || !newSynonymOriginWord"
+              >Add Synonym</button>
             </div>
             <div class="synonyms-list" v-if="newSynonymsDataToSave.length>0">
-              Added synonyms:
-              <span
-                class="button alt"
-                v-for="item in newSynonymsDataToSave"
-                :key="item"
-              >{{ item }}</span>
+              <span class="button alt item-list item" v-for="item in newSynonymsDataToSave" :key="item">
+                {{ item }}
+                <i class="fa fa-remove" v-on:click="deleteSynonym(item)"></i>
+              </span>
             </div>
-            <div>
-              <button class="button save-btn" v-on:click="saveSynonyms">Save Synonyms</button>
+            <div v-if="newSynonymOriginWord!='' && newSynonymsDataToSave.length>0 ">
+              <button class="button save-btn" v-on:click="saveSynonyms">Save Changes</button>
             </div>
-          </div>
-          <div v-on:click="goToAddNewSynonymsTab(false)" class="link">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-            Back
           </div>
         </div>
       </section>
@@ -124,8 +135,19 @@ export default {
     },
 
     addSynonym: function() {
+      if (this.newSynonymsDataToSave.indexOf(this.newSynonymValue) > 0) {
+        this.$toastr("info", "Synonym already exists");
+        return;
+      }
       this.newSynonymsDataToSave.push(this.newSynonymValue);
       this.newSynonymValue = "";
+    },
+
+    deleteSynonym: function(clicked) {
+      const filteredSynonymsList = this.newSynonymsDataToSave.filter(
+        item => item != clicked
+      );
+      this.newSynonymsDataToSave = filteredSynonymsList;
     },
 
     saveSynonyms: function() {
@@ -159,8 +181,8 @@ export default {
   cursor: pointer;
   font-size: 15px;
   letter-spacing: 0.05em;
-  color: #75a2f3;
-  margin-top: 40px;
+  color: #4bb6fe;
+  margin-top: 10px;
   font-weight: bold;
 }
 
@@ -182,6 +204,13 @@ export default {
 
 .synonyms-list {
   margin-top: 20px;
+  display: flex;
+  max-width: 90%;
+  flex-wrap: wrap;
+}
+
+.synonyms-list .item {
+  margin-right: 10px
 }
 
 .search-form {
@@ -210,5 +239,25 @@ export default {
 .search-field {
   border-top-right-radius: unset;
   border-bottom-right-radius: unset;
+}
+
+.add-synonym-btn {
+  background-color: #805270;
+  font-size: 12px;
+  margin-top: 20px;
+}
+.custom-input {
+  height: 2em;
+  margin-top: 20px;
+}
+
+.synonyms-form-btn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.item-list {
+  height: 1.5em;
+  line-height: 1.5em;
 }
 </style>
