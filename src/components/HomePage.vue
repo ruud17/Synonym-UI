@@ -117,6 +117,7 @@ export default {
       //search tab state
       searchSynonymInputValue: "",
       synonymsResults: [],
+      clearDataMsg: "",
       //add new synonyms tab state
       newSynonymOriginWord: "",
       newSynonymValue: "",
@@ -127,9 +128,10 @@ export default {
     synonymsAPI
       .clearData()
       .then(response => {
+        this.clearDataMsg = response;
       })
       .catch(e => {
-          this.$toastr("error", e);
+        this.$toastr("error", e);
       });
   },
   methods: {
