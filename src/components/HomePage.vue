@@ -176,9 +176,9 @@ export default {
     },
 
     saveSynonyms: function() {
-      this.newSynonymsDataToSave.push(this.newSynonymOriginWord);
+      let dataToSave = [...this.newSynonymsDataToSave, this.newSynonymOriginWord]
       synonymsAPI
-        .addSynonyms({ data: this.newSynonymsDataToSave })
+        .addSynonyms({ data: dataToSave})
         .then(response => {
           this.$toastr("success", `${response.data.message}`);
           this.resetDataWhenChangingTab();
